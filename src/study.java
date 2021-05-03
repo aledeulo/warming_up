@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 public class study {
 
     public static void main(String[] args) {
-        System.out.println(migratoryBirds(Arrays.asList(1, 2, 3, 4, 5, 4, 3, 2, 1, 3, 4)));
+        System.out.println(migratoryBirds(Arrays.asList(3, 3, 2, 2, 5, 3)));
     }
 
     /*Level easy start*/
@@ -214,21 +214,21 @@ public class study {
 
     public static int migratoryBirds(List<Integer> arr) {
         // Write your code here
-        Map<Integer, Integer> ids = new LinkedHashMap<>();
-        for (int i = 0; i < arr.size() - 1; i++) {
-            for (int j = i; j < arr.size(); j++) {
-                if (i != j && arr.get(i).equals(arr.get(j))) {
-                    if (ids.containsKey(arr.get(i))) {
-                        int val = ids.get(arr.get(i)) + 1;
-                        ids.replace(arr.get(i), val);
-                    } else {
-                        ids.put(arr.get(i), 1);
-                    }
-                }
+        int[] counter = new int[arr.size()];
+        int result = 1;
+        int max = 0;
+        for (Integer integer : arr) {
+            counter[integer]++;
+        }
+
+        for (int i = 1; i <= arr.size() - 1; i++) {
+            if (counter[i] > max) {
+                result = i;
+                max = counter[i];
             }
         }
-        Map.Entry<Integer, Integer> min = Collections.min(ids.entrySet(), Map.Entry.comparingByValue());
-        return min.getKey();
+
+        return result;
     }
     /*Level easy ends*/
 
