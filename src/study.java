@@ -1,15 +1,14 @@
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class study {
 
     public static void main(String[] args) {
-        System.out.println(breakingRecords(Arrays.asList(17, 45, 41, 60, 17, 41, 76, 43, 51, 40, 89, 92, 34, 6, 64, 7, 37, 81, 32, 50)));
+        System.out.println(migratoryBirds(Arrays.asList(1, 2, 3, 4, 5, 4, 3, 2, 1, 3, 4)));
     }
 
+    /*Level easy start*/
     private static int jumpingClouds(int[] c) {
         List<Integer> steps = new ArrayList<>();
         int i = 0;
@@ -53,7 +52,7 @@ public class study {
     }
 
     static List<Integer> compareTriplets(List<Integer> a, List<Integer> b) {
-        List<Integer> res = new ArrayList<>() {{
+        List<Integer> res = new ArrayList<Integer>() {{
             add(0);
             add(0);
         }};
@@ -190,8 +189,52 @@ public class study {
         return Arrays.asList(breaks, minorScore.size());
     }
 
+    static int birthday(List<Integer> s, int d, int m) {
+
+        if (s.size() == 0)
+            return 0;
+
+        if (s.size() == 1 && s.get(0) == d)
+            return 1;
+
+        int count = 0;
+        for (int i = 0; i < s.size(); i++) {
+            int limit = i + m;
+            if (limit <= s.size()) {
+                int sum = 0;
+                for (int j = i; j < limit; j++) {
+                    sum += s.get(j);
+                }
+                if (sum == d)
+                    count++;
+            } else break;
+        }
+        return count;
+    }
+
+    public static int migratoryBirds(List<Integer> arr) {
+        // Write your code here
+        Map<Integer, Integer> ids = new LinkedHashMap<>();
+        for (int i = 0; i < arr.size() - 1; i++) {
+            for (int j = i; j < arr.size(); j++) {
+                if (i != j && arr.get(i).equals(arr.get(j))) {
+                    if (ids.containsKey(arr.get(i))) {
+                        int val = ids.get(arr.get(i)) + 1;
+                        ids.replace(arr.get(i), val);
+                    } else {
+                        ids.put(arr.get(i), 1);
+                    }
+                }
+            }
+        }
+        Map.Entry<Integer, Integer> min = Collections.min(ids.entrySet(), Map.Entry.comparingByValue());
+        return min.getKey();
+    }
+    /*Level easy ends*/
+
+
     /*public static int separateTheChocolate(List<String> chocolate) {
-        long delph = chocolate.stream().filter(s -> s.equalsIgnoreCase("D")).count();
+        long del = chocolate.stream().filter(s -> s.equalsIgnoreCase("D")).count();
         long both = chocolate.stream().filter(s -> s.equalsIgnoreCase("U")).count();
         long tom = chocolate.stream().filter(s -> s.equalsIgnoreCase("T")).count();
 
