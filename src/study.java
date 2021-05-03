@@ -1,12 +1,13 @@
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class study {
 
     public static void main(String[] args) {
-        plusMinus(new int[]{-4, 3, -9, 0, 4, 1});
+        System.out.println(breakingRecords(Arrays.asList(17, 45, 41, 60, 17, 41, 76, 43, 51, 40, 89, 92, 34, 6, 64, 7, 37, 81, 32, 50)));
     }
 
     private static int jumpingClouds(int[] c) {
@@ -23,7 +24,6 @@ public class study {
         }
         return steps.size();
     }
-
 
     static long repeatedString(String s, long n) {
         if (!s.contains("a"))
@@ -53,7 +53,7 @@ public class study {
     }
 
     static List<Integer> compareTriplets(List<Integer> a, List<Integer> b) {
-        List<Integer> res = new ArrayList<Integer>() {{
+        List<Integer> res = new ArrayList<>() {{
             add(0);
             add(0);
         }};
@@ -107,4 +107,93 @@ public class study {
         System.out.printf("%.6f", neg).print("\n");
         System.out.printf("%.6f", zero).print("\n");
     }
+
+    public static void staircase(int n) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            if (i == n - 1) {
+                for (int j = 0; j < n; j++) {
+                    builder.append("#");
+                }
+            } else {
+                //add spaces
+                int spaces = (n - 1) - i;
+                for (int j = 0; j < spaces; j++) {
+                    builder.append(" ");
+                }
+                for (int j = spaces; j < n; j++) {
+                    builder.append("#");
+                }
+                builder.append("\n");
+            }
+        }
+        System.out.println(builder);
+    }
+
+    public static void miniMaxSum(List<Integer> arr) {
+        List<Integer> ordered = arr.stream().sorted().collect(Collectors.toList());
+        List<Integer> maxList = ordered.subList(1, ordered.size());
+        List<Integer> minList = ordered.subList(0, ordered.size() - 1);
+        String res = minList.stream().mapToLong(Integer::longValue).sum() + " " + maxList.stream().mapToLong(Integer::longValue).sum();
+        System.out.println(res);
+    }
+
+    public static int birthdayCakeCandles(List<Integer> candles) {
+        // Write your code here
+        List<Integer> ordered = candles.stream().sorted().collect(Collectors.toList());
+        int max = ordered.get(ordered.size() - 1);
+        return (int) ordered.stream().filter(i -> i == max).count();
+    }
+
+    public static String timeConversion(String s) {
+        s = s.toLowerCase();
+        boolean military = s.contains("pm") || (s.contains("12") && s.contains("am"));
+        String[] array = s.contains("am") ? s.split("am") : s.split("pm");
+        if (!military)
+            return array[0];
+
+        array = array[0].split(":");
+        int hour = Integer.parseInt(array[0]);
+        StringBuilder time = new StringBuilder();
+        if (hour == 12 && s.contains("am")) {
+            time.append("00");
+        } else if (hour == 12 && s.contains("pm")) {
+            time.append(12);
+        } else time.append(hour + 12);
+        time.append(":");
+        for (int i = 1; i < array.length; i++) {
+            if (i == array.length - 1) {
+                time.append(array[i]);
+            } else {
+                time.append(array[i]).append(":");
+            }
+        }
+        return time.toString();
+    }
+
+    public static List<Integer> breakingRecords(List<Integer> scores) {
+        final int initial = scores.get(0);
+        final List<Integer> upScore = Arrays.asList(initial);
+        final TreeSet<Integer> minorScore = new TreeSet<>();
+        minorScore.add(initial);
+        int breaks = (int) scores.stream().filter(s -> {
+            if (s > upScore.get(0)) {
+                upScore.set(0, s);
+                return true;
+            }
+            if (s < minorScore.first()) {
+                minorScore.add(s);
+            }
+            return false;
+        }).count();
+        minorScore.remove(minorScore.last());
+        return Arrays.asList(breaks, minorScore.size());
+    }
+
+    /*public static int separateTheChocolate(List<String> chocolate) {
+        long delph = chocolate.stream().filter(s -> s.equalsIgnoreCase("D")).count();
+        long both = chocolate.stream().filter(s -> s.equalsIgnoreCase("U")).count();
+        long tom = chocolate.stream().filter(s -> s.equalsIgnoreCase("T")).count();
+
+    }*/
 }
