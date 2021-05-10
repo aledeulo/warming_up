@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 public class study {
 
     public static void main(String[] args) {
-        System.out.println(isBalanced("{}("));
+        List<Integer> arr = Arrays.asList(1, 2, 3, 4, 5);
+        System.out.println(rotLeft(arr, 4));
 
     }
 
@@ -254,6 +255,32 @@ public class study {
         }
         return String.valueOf(stack.isEmpty());
     }
+
+    public static int hourglassSum(List<List<Integer>> arr) {
+        int sum = Integer.MIN_VALUE;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                int top = arr.get(i).get(j) + arr.get(i).get(j + 1) + arr.get(i).get(j + 2);
+                int middle = arr.get(i + 1).get(j + 1);
+                int bottom = arr.get(i + 2).get(j) + arr.get(i + 2).get(j + 1) + arr.get(i + 2).get(j + 2);
+                if (top + middle + bottom > sum) {
+                    sum = top + middle + bottom;
+                }
+            }
+        }
+
+        return sum;
+    }
+
+    public static List<Integer> rotLeft(List<Integer> a, int d) {
+        List<Integer> b = new ArrayList<>(a);
+        for(int i = 0; i < a.size(); i++) {
+            int j = (i+a.size()-d)%a.size();
+            b.set(j, a.get(i));
+        }
+        return b;
+    }
+
     /*Level easy ends*/
 
 
